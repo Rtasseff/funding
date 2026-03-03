@@ -37,6 +37,7 @@ This is intentionally modular: each module can be funded and delivered independe
 - **Call triage:** populate `GRANT_FIT_MATRIX_TEMPLATE.*`
 - **Proposal assembly:** copy/paste from module fiches, then tailor to call language
 - **Credibility:** reuse text and numbers from `EVIDENCE_BANK.md` and `TEAM_PROFILES.md`
+- **Stakeholder reports:** share finished documents from `REPORTS/` with PIs, leadership, or partners
 - **Grant scanning:** see `GRANT_SCANNER_CLI_SPEC.md`, `BOT_MATCHING_SPEC.md`, and `bot/`
 
 ## Repository structure
@@ -70,6 +71,9 @@ REFERENCE/
   REFERENCES_INTERNAL.md
   deep-research-report.md                    <- State-of-the-art review (imaging AI, foundation models, validation)
   program_Proposal–Theory-infused_Ai.docx   <- Program proposal: Theory-infused AI for Biomedical Imaging
+REPORTS/                        <- Deliverable reports for stakeholders
+  FUNDING_STRATEGY_REPORT.md                   <- Detailed funding strategy report (PI-shareable)
+  theory_ai_assessment_summary.docx            <- Theory-infused AI assessment summary
 bot/                            <- Grant scanner CLI tool development
   README.md
   config.yaml

@@ -74,7 +74,11 @@ This doctrine is already operational: the current Kanban separates institutional
 - **Spain (ICTS / AEI / ISCIII):** Upgrades analysis on ICTS-linked imaging infrastructure (ReDIB node), aligning with national goals in AI, personalized medicine, and research modernization. Fundable via AEI (AI/modeling) and ISCIII (biomedical data) programs.
 - **Europe (Horizon / GenAI4EU / EOSC):** Maps to Horizon Europe Health & Digital (multimodal data, trustworthy AI, digital twins) and GenAI4EU opportunities; commits to EOSC-style openness; can leverage EuroHPC at scale.
 
-## 9) Guardrails
+## 9) Deliverable reports
+
+Finished reports live in `REPORTS/`. These are stakeholder-ready documents assembled from the dossier's source-of-truth files (module fiches, evidence bank, strategy, roadmap). Keep source files current; regenerate reports as needed.
+
+## 10) Guardrails
 
 - Avoid "infinite platform" framing; fund the next implementable increment.
 - Prefer measurable deliverables to aspirational language.

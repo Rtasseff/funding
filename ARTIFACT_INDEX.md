@@ -47,6 +47,10 @@
 - `bot/README.md` — grant scanner CLI tool status, commands, and setup
 - `bot/config.yaml` — reference configuration template (runtime config at `~/.grant-scanner/`)
 
+### Deliverable reports (`REPORTS/`)
+- `FUNDING_STRATEGY_REPORT.md` — detailed funding strategy report covering program vision, five modules, phased roadmap, funding alignment, and execution doctrine (PI-shareable)
+- `theory_ai_assessment_summary.docx` — theory-infused AI assessment summary
+
 ### Personnel
 - `RyanTasseff_CV.md` — operational lead CV (markdown)
 - `RyanTasseff_basic_20250613.docx` — operational lead CV (original)
@@ -57,6 +61,7 @@
 2. Treat each file in `MODULES/` as "source of truth" for proposal work packages.
 3. Track opportunities in the Grant-Fit Matrix and link them to module IDs.
 4. Keep `EVIDENCE_BANK.md` and `TEAM_PROFILES.md` current; they prevent rewriting credibility text every time.
+5. Share finished deliverable reports from `REPORTS/` with PIs, leadership, or partners.
 
 ## Naming conventions
 
