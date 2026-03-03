@@ -1,0 +1,48 @@
+# Funding Opportunity Bot Configuration
+# Status: Template — not yet operational
+
+# Module fiches to score against (relative to repo root)
+modules:
+  - MODULES/MOD-FAIR-TRAIN.md
+  - MODULES/MOD-IMG-SERVERS.md
+  - MODULES/MOD-AI-PIPELINES.md
+  - MODULES/MOD-MULTIMODAL-BIOMARKERS.md
+
+# Keywords taxonomy (relative to repo root)
+keywords_file: REFERENCE/KEYWORDS_TAXONOMY.md
+
+# Output
+output:
+  grant_fit_matrix: GRANT_FIT_MATRIX_TEMPLATE.csv
+  notification: stdout  # future: email, slack, etc.
+
+# Data sources (to be configured)
+sources: []
+  # Example source definitions:
+  # - name: "EU Funding & Tenders"
+  #   type: rss
+  #   url: "https://ec.europa.eu/info/funding-tenders/opportunities/portal/..."
+  #   geography: EU
+  #   check_interval_hours: 24
+  #
+  # - name: "AEI Convocatorias"
+  #   type: web_scrape
+  #   url: "https://www.aei.gob.es/convocatorias"
+  #   geography: Spain
+  #   check_interval_hours: 24
+  #
+  # - name: "SPRI / Gobierno Vasco"
+  #   type: web_scrape
+  #   url: "https://www.spri.eus/..."
+  #   geography: Basque
+  #   check_interval_hours: 24
+
+# Scoring parameters (from BOT_MATCHING_SPEC.md)
+scoring:
+  keyword_match_points: 2
+  keyword_match_cap: 10
+  eligibility_match_points: 3
+  budget_alignment_points: 2
+  geography_fit_points: 2
+  consortium_mismatch_penalty: -3
+  minimum_score_threshold: 5
