@@ -37,10 +37,6 @@ Deploy and operationalize complementary imaging repositories—OMERO for microsc
 - Standards alignment work underway (DICOM/OME/REMBI/BIDS awareness).
 - Key framing: ingestion + registry + metadata governance pilots are already running; servers are the *packaging layer* once workflows stabilize.
 
-## Assumption note
-
-This fiche assumes "Xnet" means **XNAT** (common in biomedical imaging). If "Xnet" refers to a different system, swap the platform name; the governance and deliverables remain the same.
-
 ## Next-stage objective (12-24 months)
 
 1. Define governance: identity/access, lifecycle, "system of record" for imaging metadata.
@@ -52,6 +48,7 @@ This fiche assumes "Xnet" means **XNAT** (common in biomedical imaging). If "Xne
 
 - Federation/interoperability: APIs, controlled sharing, multi-site collaboration.
 - Integration with validated AI pipelines and containerized analysis.
+- Longitudinal and time-series imaging datasets versioned and accessible for theory-infused dynamical models (MOD-THEORY-AI).
 
 ## Risks / mitigations
 

@@ -32,6 +32,7 @@ Use a controlled list for consistent matching and reporting.
 - segmentation
 - denoising
 - registration
+- classification
 - pipeline
 - reproducibility
 - model registry
@@ -40,8 +41,47 @@ Use a controlled list for consistent matching and reporting.
 - QA/QC
 - containerization
 - GPU scheduling
+- foundation models
+- self-supervised learning (SSL)
+- vision transformers (ViT)
+- multiple-instance learning (MIL)
+- weak supervision
+- attention-based aggregation
+- uncertainty quantification
+- calibration
+- triage workflows
+- domain-shift validation
+- explainability
+- saliency maps
+- Grad-CAM
+- TRIPOD+AI
+- model lifecycle
+- freedom-to-operate
 
-## Multimodal biomarker discovery
+## Theory-infused AI
+- theory-infused AI
+- physics-informed neural networks (PINNs)
+- generative AI
+- latent variable models
+- variational autoencoders (VAE)
+- statistical mechanics
+- nonlinear dynamics
+- bifurcation analysis
+- latent ODE/PDE
+- neural ODE
+- manifold-constrained dynamics
+- entropy-based regularization
+- multi-scale modeling
+- agent-based modeling
+- mechanistic modeling
+- first-principles biology
+- digital twins
+- predictive modeling
+- interpretability by construction
+- molecular dynamics
+- atomistic simulation
+
+## Multimodal biomarker discovery & predictive imaging
 - biomarker
 - multimodal
 - data integration
@@ -50,3 +90,11 @@ Use a controlled list for consistent matching and reporting.
 - phenotype
 - predictive modeling
 - validation
+- digital twins
+- adaptive acquisition
+- real-time imaging
+- individualized prediction
+- decision support
+- longitudinal imaging
+- multimodal fusion
+- translational testbeds

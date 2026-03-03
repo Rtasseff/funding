@@ -1,48 +1,41 @@
-# Funding Opportunity Bot Configuration
+# Grant Scanner CLI — Reference Configuration
 # Status: Template — not yet operational
+# Runtime config lives at ~/.grant-scanner/config.yaml
+# This in-repo copy serves as a documented reference.
 
-# Module fiches to score against (relative to repo root)
-modules:
-  - MODULES/MOD-FAIR-TRAIN.md
-  - MODULES/MOD-IMG-SERVERS.md
-  - MODULES/MOD-AI-PIPELINES.md
-  - MODULES/MOD-MULTIMODAL-BIOMARKERS.md
+# Dossier files loaded as LLM context for evaluation (relative to repo root)
+dossier:
+  strategy: STRATEGY.md
+  overview: PROJECT_OVERVIEW.md
+  modules:
+    - MODULES/MOD-FAIR-TRAIN.md
+    - MODULES/MOD-IMG-SERVERS.md
+    - MODULES/MOD-AI-PIPELINES.md
+    - MODULES/MOD-THEORY-AI.md
+    - MODULES/MOD-MULTIMODAL-BIOMARKERS.md
 
-# Keywords taxonomy (relative to repo root)
+# Keywords taxonomy (used for source-level pre-filtering, not for scoring)
 keywords_file: REFERENCE/KEYWORDS_TAXONOMY.md
+
+# Filtering parameters
+filters:
+  min_lead_time_days: 90
+  url_timeout_seconds: 10
+  request_delay_seconds: 1  # rate limiting per domain
+
+# LLM evaluation
+evaluation:
+  model: claude  # via claude CLI or Anthropic API
+  inclusion_rule:
+    min_module_score: 2          # at least one module must score >= this
+    min_confidence: MEDIUM       # MEDIUM or HIGH required for report inclusion
 
 # Output
 output:
+  reports_dir: reports/          # grant_scan_YYYY-MM-DD.md and .csv
+  logs_dir: logs/                # dead_links.log, borderline.log, scan.log
   grant_fit_matrix: GRANT_FIT_MATRIX_TEMPLATE.csv
-  notification: stdout  # future: email, slack, etc.
 
-# Data sources (to be configured)
-sources: []
-  # Example source definitions:
-  # - name: "EU Funding & Tenders"
-  #   type: rss
-  #   url: "https://ec.europa.eu/info/funding-tenders/opportunities/portal/..."
-  #   geography: EU
-  #   check_interval_hours: 24
-  #
-  # - name: "AEI Convocatorias"
-  #   type: web_scrape
-  #   url: "https://www.aei.gob.es/convocatorias"
-  #   geography: Spain
-  #   check_interval_hours: 24
-  #
-  # - name: "SPRI / Gobierno Vasco"
-  #   type: web_scrape
-  #   url: "https://www.spri.eus/..."
-  #   geography: Basque
-  #   check_interval_hours: 24
-
-# Scoring parameters (from BOT_MATCHING_SPEC.md)
-scoring:
-  keyword_match_points: 2
-  keyword_match_cap: 10
-  eligibility_match_points: 3
-  budget_alignment_points: 2
-  geography_fit_points: 2
-  consortium_mismatch_penalty: -3
-  minimum_score_threshold: 5
+# Sources are defined separately in sources.yaml
+# See GRANT_SCANNER_CLI_SPEC.md section 3 for the full source list
+sources_file: sources.yaml

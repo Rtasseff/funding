@@ -3,8 +3,9 @@
 **Purpose:** Reusable "funding positioning dossier" for a multi-year program at CIC biomaGUNE:
 1. FAIR data practices and adoption
 2. Imaging data servers and governed access (OMERO + XNAT)
-3. Cross-group AI production pipelines
-4. Multimodal biomarker discovery (PI-led science layer)
+3. Cross-group AI production pipelines (foundation-model-first)
+4. Theory-infused AI framework (generative AI + mechanistic modeling)
+5. Multimodal biomarker discovery & predictive imaging (PI-led science layer)
 
 **Created:** 2026-03-03
 
@@ -18,16 +19,18 @@
 - `EVIDENCE_BANK.md` — reusable "why this team / why this institute" proof points
 - `TEAM_PROFILES.md` — proposal-ready key personnel bios (linked to CV)
 
-### Opportunity tracking
+### Opportunity tracking and grant scanning
 - `GRANT_FIT_MATRIX_TEMPLATE.md` — opportunity tracker instructions
 - `GRANT_FIT_MATRIX_TEMPLATE.csv` — opportunity tracker data (machine-readable)
-- `BOT_MATCHING_SPEC.md` — machine-friendly fields for automated scanning/triage
+- `GRANT_SCANNER_CLI_SPEC.md` — grant scanner CLI tool specification (full spec: sources, filtering, LLM evaluation, output format, CLI interface)
+- `BOT_MATCHING_SPEC.md` — grant scanner matching and evaluation logic (LLM contextual analysis, module scoring, filtering pipeline)
 
 ### Module fiches (`MODULES/`)
 - `MOD-FAIR-TRAIN.md` — FAIR Data Practices Enablement (Training + Adoption)
 - `MOD-IMG-SERVERS.md` — Imaging Data Infrastructure (OMERO + XNAT)
-- `MOD-AI-PIPELINES.md` — Cross-Group AI Pipeline Factory
-- `MOD-MULTIMODAL-BIOMARKERS.md` — Multimodal AI for Biomarker Discovery
+- `MOD-AI-PIPELINES.md` — Cross-Group AI Pipeline Factory (foundation-model-first, validated, uncertainty-aware)
+- `MOD-THEORY-AI.md` — Theory-Infused AI Framework (Generative AI + Mechanistic Modeling)
+- `MOD-MULTIMODAL-BIOMARKERS.md` — Multimodal AI for Biomarker Discovery & Predictive Imaging
 
 ### Templates (`TEMPLATES/`)
 - `PROJECT_FICHE_TEMPLATE.md` — blank module fiche template
@@ -37,10 +40,12 @@
 - `GOVERNANCE_RACI.md` — roles, decision rights, and service boundaries
 - `KEYWORDS_TAXONOMY.md` — controlled keywords for matching/reporting
 - `REFERENCES_INTERNAL.md` — pointers to existing BiomaGUNE RDM artifacts
+- `deep-research-report.md` — state-of-the-art review: imaging AI classification, foundation models, validation practices, datasets, IP landscape
+- `program_Proposal–Theory-infused_Ai.docx` — program proposal: Theory-infused AI for Biomedical Imaging (vision, aims, phased roadmap, alignment)
 
-### Bot development (`bot/`)
-- `bot/README.md` — bot development status and architecture plan
-- `bot/config.yaml` — data source and scoring configuration
+### Grant scanner CLI development (`bot/`)
+- `bot/README.md` — grant scanner CLI tool status, commands, and setup
+- `bot/config.yaml` — reference configuration template (runtime config at `~/.grant-scanner/`)
 
 ### Personnel
 - `RyanTasseff_CV.md` — operational lead CV (markdown)
@@ -55,6 +60,6 @@
 
 ## Naming conventions
 
-- Umbrella program: "AI-ready imaging data infrastructure & reuse"
+- Umbrella program: "Theory-Infused AI for Biomedical Imaging"
 - Module sheets: "Project Fiche"
 - Call adaptation: "Concept Note"

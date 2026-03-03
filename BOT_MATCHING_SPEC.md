@@ -1,58 +1,95 @@
-# Bot Matching Spec — Machine-Friendly Fields for Automated Triage
+# Grant Scanner — Matching and Evaluation Spec
 
 **Date:** 2026-03-03
 
-## Goal
+## Overview
 
-Enable automated scanning of funding opportunities and matching to module fiches with minimal human interpretation.
+The grant scanner is an **LLM-powered CLI tool** (not a keyword-matching bot) that reads actual call text and evaluates contextual fit against the program's five modules and two tracks. This document defines the matching logic. For full tool specification, see `GRANT_SCANNER_CLI_SPEC.md`.
 
-## How this works
+## Evaluation approach: LLM contextual analysis
 
-Each module fiche begins with a YAML header with standardized fields. A monitoring workflow can:
-1. Extract opportunity text (title, abstract, eligibility, themes, budget, deadlines)
-2. Score fit against module keywords and constraints
-3. Recommend Track A or Track B configuration
-4. Produce a short triage note + suggested next action
+The scanner does **not** use keyword-matching heuristics. Instead, it:
 
-## Required module fields (YAML)
+1. Fetches the actual call text (or abstract/summary if full text is gated)
+2. Loads the dossier context (STRATEGY.md, PROJECT_OVERVIEW.md, all five module fiches)
+3. Sends both to Claude for contextual evaluation
+4. Produces a structured per-call assessment with scores, reasoning, confidence, and red flags
 
-- `module_id`
-- `module_name`
-- `track_type` (A / B / both)
-- `time_horizon`
-- `readiness_level`
-- `eligible_lead_types` (institution / PI_as_anchor / company / consortium)
-- `best_fit_geographies`
-- `budget_class` (small / medium / large)
-- `keywords` (controlled list; see `REFERENCE/KEYWORDS_TAXONOMY.md`)
-- `core_assets`
-- `dependencies`
-- `success_metrics`
-- `last_updated`
+This is the critical differentiator: a call mentioning "data" or "digital" is not automatically a fit. The LLM reads scope, objectives, and eligibility to confirm genuine alignment.
 
-## Opportunity fields to extract
+## Evaluation dimensions
 
-- name, funder, geography
-- themes/keywords
-- eligibility and consortium requirements
-- budget scale and allowed costs
-- windows/deadlines
-- evaluation criteria (if available)
+### 1. Track fit
 
-## Simple scoring heuristic
+Does the call fund:
+- **Track A** — institutional enablement / infrastructure / open science?
+- **Track B** — PI-anchored scientific projects with platform work packages?
+- **A+B** — both?
+- **Neither** — scope doesn't align with the two-track pattern?
 
-- +2 per keyword match (capped)
-- +3 if eligibility matches module `eligible_lead_types`
-- +2 if allowed costs align with module `budget_class`
-- +2 if geography fits
-- -3 if consortium requirements exceed current partner readiness
+### 2. Module fit (0-3 per module)
 
-Output: top 1-2 modules + recommended Track + next action
+| Score | Meaning |
+|---|---|
+| 0 | No fit |
+| 1 | Superficial keyword overlap but scope doesn't align |
+| 2 | Partial fit, would require creative framing |
+| 3 | Strong natural fit |
 
-## Data sources (to be configured)
+Modules evaluated:
+- **MOD-FAIR-TRAIN** — FAIR data practices, training, adoption, open science compliance
+- **MOD-IMG-SERVERS** — imaging repositories, OMERO/XNAT, data infrastructure, governed access
+- **MOD-AI-PIPELINES** — validated analysis pipelines, foundation models, AI/ML for imaging, QA
+- **MOD-THEORY-AI** — theory-infused AI, generative AI + mechanistic modeling, physics-informed ML, nonlinear dynamics
+- **MOD-MULTIMODAL-BIOMARKERS** — multimodal science, biomarker discovery, predictive imaging, digital twins
 
-See `bot/config.yaml` for opportunity feed configuration.
+### 3. Confidence
 
-## Implementation status
+Overall assessment of whether the call is worth pursuing:
+- **HIGH** — strong fit, clear eligibility, actionable
+- **MEDIUM** — plausible fit, may require creative framing or partner coordination
+- **LOW** — weak fit, likely false positive
 
-See `bot/README.md` for current development status.
+### 4. Red flags
+
+Any scope mismatches, eligibility issues, or reasons this might be a false positive. Examples:
+- "digital health" used in a clinical IT context that doesn't apply
+- Consortium requirements that exceed current partner readiness
+- Budget scale misaligned with program scope
+- Geographic restrictions that exclude biomaGUNE
+
+## Filtering pipeline
+
+Calls pass through four stages before appearing in the report:
+
+1. **Deadline filter** — minimum 90 days lead time; expired calls excluded; pre-announcements included and flagged
+2. **URL validation** — HTTP check confirms the link resolves to actual call content (not a generic error page)
+3. **LLM contextual evaluation** — full assessment against dossier context
+4. **Composite inclusion rule** — at least one module ≥ 2, confidence MEDIUM or HIGH
+
+Calls that fail stage 4 go to `borderline.log` for optional manual review.
+
+## Dossier context files (loaded for evaluation)
+
+- `STRATEGY.md` — two-track pattern and packaging rules
+- `PROJECT_OVERVIEW.md` — program scope, non-goals, phased outcomes
+- `MODULES/MOD-FAIR-TRAIN.md`
+- `MODULES/MOD-IMG-SERVERS.md`
+- `MODULES/MOD-AI-PIPELINES.md`
+- `MODULES/MOD-THEORY-AI.md`
+- `MODULES/MOD-MULTIMODAL-BIOMARKERS.md`
+
+## Output
+
+See `GRANT_SCANNER_CLI_SPEC.md` sections 5-6 for full output format. Summary:
+
+- **Primary:** dated Markdown report (`grant_scan_YYYY-MM-DD.md`) grouped by confidence level
+- **Secondary:** flat CSV that feeds into `GRANT_FIT_MATRIX_TEMPLATE.csv`
+- **Logs:** `dead_links.log`, `borderline.log`, `scan.log`
+
+## What this does NOT do
+
+- Replace human judgment — this is a filter and structured briefing, not a decision maker
+- Submit proposals or pre-register for calls
+- Send notifications (v1 — may be added later)
+- Guarantee completeness — some calls may not appear on monitored portals

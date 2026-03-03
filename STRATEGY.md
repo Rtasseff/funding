@@ -4,13 +4,14 @@
 
 ## 1) Why portfolio funding
 
-"FAIR + imaging servers + production AI + multimodal science" spans distinct funder preferences:
+"FAIR + imaging servers + production AI + theory-infused modeling + multimodal science" spans distinct funder preferences:
 - institutional capability / infrastructure
 - open science and interoperability
-- method/tool development
-- scientific discovery
+- method/tool development (AI pipelines, physics-informed ML)
+- fundamental research (generative AI + mechanistic modeling)
+- scientific discovery and translational impact (biomarkers, digital twins)
 
-A portfolio approach reduces dependency on any single call and supports staged delivery.
+A portfolio approach reduces dependency on any single call and supports staged delivery. The addition of theory-infused AI (MOD-THEORY-AI) opens funding lanes in fundamental AI/modeling research (AEI, Horizon Digital/AI) that pure infrastructure proposals cannot access.
 
 ## 2) Two-track proposal pattern
 
@@ -19,15 +20,15 @@ Focus: services, compliance, interoperability, adoption metrics.
 Typical calls: open science, institutional digital infrastructure, equipment/infrastructure.
 
 ### Track B — PI-anchored scientific projects
-Focus: biological/clinical aims led by PIs; platform work as funded WPs.
-Typical calls: health/biomedical research, translational programs, collaborative R&D.
+Focus: biological/clinical aims led by PIs; platform work as funded WPs; theory-infused modeling as a research program.
+Typical calls: health/biomedical research, translational programs, collaborative R&D, AI/modeling research (AEI), GenAI4EU, EuroHPC.
 
 **Rule:** Every Track A deliverable should be proven through at least one Track B anchor.
 
 ## 3) Packaging rules (repeatable proposal building)
 
 - Keep a stable umbrella narrative (Program Brief).
-- Maintain four module fiches as the source of truth.
+- Maintain five module fiches as the source of truth.
 - For each call, write a 1-2 page Concept Note that:
   - maps call language to module IDs
   - states eligibility lead and partner needs
@@ -39,6 +40,8 @@ Typical calls: health/biomedical research, translational programs, collaborative
 - **Infrastructure:** datasets ingested, TB served, onboarding time, uptime
 - **Reuse:** internal reuse events, # analyses run
 - **Science:** validated performance reports, publications (Track B)
+- **Theory-AI:** formulations published, pilot models on real data, predictive improvement over data-only baselines
+- **Partnerships:** DIPC collaboration scoped, external co-development testbeds
 
 ## 5) Sustainability pattern (include every time)
 
@@ -63,10 +66,18 @@ This doctrine is already operational: the current Kanban separates institutional
 - Weekly triage (1 hour/Friday): scan opportunities, score fit, update matrix
 - Combined 1-pager (RDM + image analysis) as the standing input to scouting
 - Grant-fit matrix as the living tracker (see `GRANT_FIT_MATRIX_TEMPLATE.*`)
-- Automated matching bot deferred until the human routine proves the workflow
+- Grant scanner CLI tool specified (see `GRANT_SCANNER_CLI_SPEC.md`); implementation deferred until the human routine proves the workflow
 
-## 8) Guardrails
+## 8) Alignment with regional, national, and European priorities
+
+- **Basque (RIS3 / BRTA):** Serves Bio-Health and Advanced Manufacturing/Nanotech with a strong digitalization layer — FAIR imaging data, generative-AI analytics, and translational tools for nanomedicine. Natural fit for Elkartek/Hazitek consortia; creates local software/data value chains.
+- **Spain (ICTS / AEI / ISCIII):** Upgrades analysis on ICTS-linked imaging infrastructure (ReDIB node), aligning with national goals in AI, personalized medicine, and research modernization. Fundable via AEI (AI/modeling) and ISCIII (biomedical data) programs.
+- **Europe (Horizon / GenAI4EU / EOSC):** Maps to Horizon Europe Health & Digital (multimodal data, trustworthy AI, digital twins) and GenAI4EU opportunities; commits to EOSC-style openness; can leverage EuroHPC at scale.
+
+## 9) Guardrails
 
 - Avoid "infinite platform" framing; fund the next implementable increment.
 - Prefer measurable deliverables to aspirational language.
 - Avoid institute-wide enforcement commitments until lighthouse pilots demonstrate adoption.
+- Theory-infused AI proposals must include working formulations and real-data pilots, not aspirational whitepapers.
+- Do not promise clinical digital twins before preclinical validation is demonstrated.

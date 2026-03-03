@@ -17,6 +17,8 @@
 - Server architecture and hosting: IT (with Program Lead input)
 - Minimal metadata profile: Program Lead + Data Contacts + Core Facility leads
 - Pipeline acceptance into "production": PI anchors + Program Lead (QA criteria)
+- Theory-infused AI research direction: Program Lead + PI anchors + DIPC partners
+- DIPC partnership scope and compute allocation: Program Lead + Steering Group + DIPC
 
 ## Service boundaries (avoid scope creep)
 
@@ -43,3 +45,5 @@
 | Accept pipeline into production | A/R | C | A/R | C | C |
 | Proposal assembly (Track A) | A/R | C | C | I | I |
 | Proposal assembly (Track B) | C | I | A/R | C | C |
+| Theory-AI research direction | A/R | I | C | I | I |
+| DIPC partnership coordination | A/R | C | C | I | I |
