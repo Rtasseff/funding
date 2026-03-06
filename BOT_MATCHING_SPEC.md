@@ -82,7 +82,7 @@ Calls that fail the composite rule are listed in the "evaluated but excluded" se
 
 See `GRANT_SCANNER_CLI_SPEC.md` sections 6-7 for full output format. Summary:
 
-- **`/scan-grants`:** dated Markdown report (`SCANS/grant_scan_YYYY-MM-DD.md`) grouped by confidence level, plus conversational summary
+- **`/scan-grants`:** dated Markdown report (`SCANS/grant_scan_YYYY-MM-DD-NN.md`) grouped by confidence level, plus conversational summary
 - **`/check-grant`:** conversational evaluation of a single call (not written to file unless requested)
 - **CSV on request:** flat CSV suitable for appending to `GRANT_FIT_MATRIX_TEMPLATE.csv`
 

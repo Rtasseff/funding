@@ -174,7 +174,7 @@ Calls failing this rule are listed in the "evaluated but excluded" section of th
 
 ## 6) Output format
 
-### `/scan-grants` report: `SCANS/grant_scan_YYYY-MM-DD.md`
+### `/scan-grants` report: `SCANS/grant_scan_YYYY-MM-DD-NN.md`
 
 ```markdown
 # Grant Scanner Report — {date}

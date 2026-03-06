@@ -58,7 +58,7 @@
 - `theory_ai_assessment_summary.docx` — theory-infused AI assessment summary
 
 ### Grant scan output (`SCANS/`)
-- `grant_scan_2026-03-06.md` — Basque Country grant scan report (first operational scan): Elkartek, Ikerbasque RF, INKER, Hazitek, Azpitek, IKERTALDE, PIBA, BERC/CIC evaluated
+- `grant_scan_2026-03-06-01.md` — Basque Country grant scan report (first operational scan): Elkartek, Ikerbasque RF, INKER, Hazitek, Azpitek, IKERTALDE, PIBA, BERC/CIC evaluated
 
 ### Personnel
 - `RyanTasseff_CV.md` — operational lead CV (markdown)
