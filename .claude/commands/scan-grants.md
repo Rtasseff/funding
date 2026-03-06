@@ -97,7 +97,7 @@ Be skeptical. A call mentioning "data" or "digital" is not automatically a fit. 
 
 ### Step 5: Write report
 
-Write the report to `REPORTS/grant_scan_YYYY-MM-DD.md` using today's date:
+Write the report to `SCANS/grant_scan_YYYY-MM-DD.md` using today's date:
 
 ```markdown
 # Grant Scanner Report — {date}

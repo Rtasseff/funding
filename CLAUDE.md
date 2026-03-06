@@ -8,7 +8,7 @@ Funding positioning dossier for CIC biomaGUNE. See `ARTIFACT_INDEX.md` for full 
 
 ### Just completed: First grant scan (Basque) + matrix populated
 
-- `/scan-grants Basque` tested successfully — report written to `REPORTS/grant_scan_2026-03-06.md`
+- `/scan-grants Basque` tested successfully — report written to `SCANS/grant_scan_2026-03-06.md`
 - Grant-Fit Matrix populated with 9 rows (3 future-cycle targets, 4 missed 2026 calls, 1 open call to verify eligibility, 1 direct subsidy framework)
 - Grant scanner commands (`/scan-grants`, `/check-grant`) are operational
 

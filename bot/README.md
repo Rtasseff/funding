@@ -18,7 +18,7 @@ Two Claude Code skills that scan funding portals and evaluate calls against the 
 /scan-grants Elkartek     # Focus on a single source
 ```
 
-Produces a dated report in `REPORTS/grant_scan_YYYY-MM-DD.md` plus a conversational summary with recommended next steps.
+Produces a dated report in `SCANS/grant_scan_YYYY-MM-DD.md` plus a conversational summary with recommended next steps.
 
 ### `/check-grant` — single call evaluation
 

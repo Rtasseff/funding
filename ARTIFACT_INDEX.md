@@ -54,7 +54,10 @@
 
 ### Deliverable reports (`REPORTS/`)
 - `FUNDING_STRATEGY_REPORT.md` — detailed funding strategy report covering program vision, five modules, phased roadmap, funding alignment, and execution doctrine (PI-shareable)
+- `program_summary_for_PIs.docx` — PI-facing program summary
 - `theory_ai_assessment_summary.docx` — theory-infused AI assessment summary
+
+### Grant scan output (`SCANS/`)
 - `grant_scan_2026-03-06.md` — Basque Country grant scan report (first operational scan): Elkartek, Ikerbasque RF, INKER, Hazitek, Azpitek, IKERTALDE, PIBA, BERC/CIC evaluated
 
 ### Personnel
