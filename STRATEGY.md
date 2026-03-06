@@ -61,12 +61,14 @@ The program operates with a deliberate execution philosophy that funders can aud
 
 This doctrine is already operational: the current Kanban separates institutional enablement from PI-anchored pilots, limits work-in-progress, and sequences delivery around demonstrated demand.
 
-## 7) Funding scouting system (already operational)
+## 7) Funding scouting system (operational)
 
 - Weekly triage (1 hour/Friday): scan opportunities, score fit, update matrix
 - Combined 1-pager (RDM + image analysis) as the standing input to scouting
-- Grant-fit matrix as the living tracker (see `GRANT_FIT_MATRIX_TEMPLATE.*`)
-- Grant scanner CLI tool specified (see `GRANT_SCANNER_CLI_SPEC.md`); implementation deferred until the human routine proves the workflow
+- Grant-fit matrix as the living tracker (see `GRANT_FIT_MATRIX_TEMPLATE.*`) — populated with 9 opportunities including 3 future-cycle targets (Elkartek 2027, Ikerbasque RF 2027, INKER 2027) with preparation milestones
+- Grant scanner commands operational: `/scan-grants` (multi-region) and `/check-grant` (single call) — see `GRANT_SCANNER_CLI_SPEC.md`
+- First scan completed 2026-03-06 (Basque): report in `REPORTS/grant_scan_2026-03-06.md`
+- Scan reports feed the matrix; matrix tracks readiness and next actions per opportunity
 
 ## 8) Alignment with regional, national, and European priorities
 

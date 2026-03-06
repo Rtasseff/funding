@@ -22,8 +22,8 @@
 ### Opportunity tracking and grant scanning
 - `GRANT_FIT_MATRIX_TEMPLATE.md` — opportunity tracker instructions
 - `GRANT_FIT_MATRIX_TEMPLATE.csv` — opportunity tracker data (machine-readable)
-- `GRANT_SCANNER_CLI_SPEC.md` — grant scanner CLI tool specification (full spec: sources, filtering, LLM evaluation, output format, CLI interface)
-- `BOT_MATCHING_SPEC.md` — grant scanner matching and evaluation logic (LLM contextual analysis, module scoring, filtering pipeline)
+- `GRANT_SCANNER_CLI_SPEC.md` — grant scanner specification (sources, scanning strategy, evaluation rubric, output format, skill invocation)
+- `BOT_MATCHING_SPEC.md` — grant scanner matching and evaluation logic (contextual analysis, module scoring, filtering pipeline)
 
 ### Module fiches (`MODULES/`)
 - `MOD-FAIR-TRAIN.md` — FAIR Data Practices Enablement (Training + Adoption)
@@ -41,15 +41,21 @@
 - `KEYWORDS_TAXONOMY.md` — controlled keywords for matching/reporting
 - `REFERENCES_INTERNAL.md` — pointers to existing BiomaGUNE RDM artifacts
 - `deep-research-report.md` — state-of-the-art review: imaging AI classification, foundation models, validation practices, datasets, IP landscape
-- `program_Proposal–Theory-infused_Ai.docx` — program proposal: Theory-infused AI for Biomedical Imaging (vision, aims, phased roadmap, alignment)
+- `program_Proposal–Theory-infused_Ai.docx` — program proposal: Image Data Infrastructure & Analysis to Drive Theory-Infused AI (vision, aims, phased roadmap, alignment)
 
-### Grant scanner CLI development (`bot/`)
-- `bot/README.md` — grant scanner CLI tool status, commands, and setup
-- `bot/config.yaml` — reference configuration template (runtime config at `~/.grant-scanner/`)
+### Grant scanner (`bot/`)
+- `bot/README.md` — grant scanner status and invocation guide
+- `bot/config.yaml` — configuration notes (evaluation parameters embedded in skill definitions)
+- `bot/sources.yaml` — funding source registry (25 sources across EU, Spain, Basque Country)
+
+### Grant scanner commands (`.claude/commands/`)
+- `.claude/commands/scan-grants.md` — multi-region scanning skill (`/scan-grants`)
+- `.claude/commands/check-grant.md` — single-call evaluation skill (`/check-grant`)
 
 ### Deliverable reports (`REPORTS/`)
 - `FUNDING_STRATEGY_REPORT.md` — detailed funding strategy report covering program vision, five modules, phased roadmap, funding alignment, and execution doctrine (PI-shareable)
 - `theory_ai_assessment_summary.docx` — theory-infused AI assessment summary
+- `grant_scan_2026-03-06.md` — Basque Country grant scan report (first operational scan): Elkartek, Ikerbasque RF, INKER, Hazitek, Azpitek, IKERTALDE, PIBA, BERC/CIC evaluated
 
 ### Personnel
 - `RyanTasseff_CV.md` — operational lead CV (markdown)
@@ -65,6 +71,6 @@
 
 ## Naming conventions
 
-- Umbrella program: "Theory-Infused AI for Biomedical Imaging"
+- Umbrella program: "Image Data Infrastructure & Analysis to Drive Theory-Infused AI"
 - Module sheets: "Project Fiche"
 - Call adaptation: "Concept Note"

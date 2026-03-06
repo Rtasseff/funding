@@ -10,13 +10,20 @@
 - DMP kit, OA archiving workflow, and officialization package in progress
 - SegOid pipeline already in user-driven iteration
 - Funding positioning dossier bootstrapped (this repository)
-- Program proposal drafted ("Theory-infused AI for Biomedical Imaging")
+- Program proposal drafted ("Image Data Infrastructure & Analysis to Drive Theory-Infused AI")
 
 **Remaining:**
 - Finalize v1.0 of the five module fiches
 - Agree governance/RACI and service boundaries (draft exists, needs steering group sign-off)
 - DIAP defining document (targeted June 2026)
 - Scope DIPC compute partnership (formal collaboration terms)
+- Run `/scan-grants Spain` and `/scan-grants EU` to complete initial scan coverage
+- Verify CIC biomaGUNE eligibility for Azpitek 2026 (infrastructure, deadline 2026-03-27)
+
+**Funding preparation milestones (tracked in Grant-Fit Matrix):**
+- Oct 2026: Begin Elkartek 2027 consortium partner outreach (DIPC, Tecnalia/Vicomtech, CIC bioGUNE)
+- Nov 2026: Prepare INKER 2027 equipment specs + vendor quotes (imaging servers or GPU compute)
+- Dec 2026: Define Ikerbasque Research Fellows 2027 candidate profile; prepare host institution letter and research proposal draft
 
 ## Phase I (3-24 months): Foundations
 
