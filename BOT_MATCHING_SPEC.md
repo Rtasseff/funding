@@ -1,10 +1,10 @@
 # Grant Scanner — Matching and Evaluation Spec
 
-**Date:** 2026-03-03
+**Date:** 2026-03-03 (updated 2026-03-06)
 
 ## Overview
 
-The grant scanner is an **LLM-powered CLI tool** (not a keyword-matching bot) that reads actual call text and evaluates contextual fit against the program's five modules and two tracks. This document defines the matching logic. For full tool specification, see `GRANT_SCANNER_CLI_SPEC.md`.
+The grant scanner consists of two Claude Code skills — **`/scan-grants`** and **`/check-grant`** — that read actual call text and evaluate contextual fit against the program's five modules and two tracks. This document defines the matching logic. For full tool specification, see `GRANT_SCANNER_CLI_SPEC.md`.
 
 ## Evaluation approach: LLM contextual analysis
 
@@ -60,14 +60,13 @@ Any scope mismatches, eligibility issues, or reasons this might be a false posit
 
 ## Filtering pipeline
 
-Calls pass through four stages before appearing in the report:
+Calls pass through three stages before appearing in the report:
 
 1. **Deadline filter** — minimum 90 days lead time; expired calls excluded; pre-announcements included and flagged
-2. **URL validation** — HTTP check confirms the link resolves to actual call content (not a generic error page)
-3. **LLM contextual evaluation** — full assessment against dossier context
-4. **Composite inclusion rule** — at least one module ≥ 2, confidence MEDIUM or HIGH
+2. **Contextual evaluation** — full assessment against dossier context (call text retrieved via WebFetch)
+3. **Composite inclusion rule** — at least one module ≥ 2, confidence MEDIUM or HIGH
 
-Calls that fail stage 4 go to `borderline.log` for optional manual review.
+Calls that fail the composite rule are listed in the "evaluated but excluded" section of the scan report.
 
 ## Dossier context files (loaded for evaluation)
 
@@ -81,11 +80,11 @@ Calls that fail stage 4 go to `borderline.log` for optional manual review.
 
 ## Output
 
-See `GRANT_SCANNER_CLI_SPEC.md` sections 5-6 for full output format. Summary:
+See `GRANT_SCANNER_CLI_SPEC.md` sections 6-7 for full output format. Summary:
 
-- **Primary:** dated Markdown report (`grant_scan_YYYY-MM-DD.md`) grouped by confidence level
-- **Secondary:** flat CSV that feeds into `GRANT_FIT_MATRIX_TEMPLATE.csv`
-- **Logs:** `dead_links.log`, `borderline.log`, `scan.log`
+- **`/scan-grants`:** dated Markdown report (`REPORTS/grant_scan_YYYY-MM-DD.md`) grouped by confidence level, plus conversational summary
+- **`/check-grant`:** conversational evaluation of a single call (not written to file unless requested)
+- **CSV on request:** flat CSV suitable for appending to `GRANT_FIT_MATRIX_TEMPLATE.csv`
 
 ## What this does NOT do
 

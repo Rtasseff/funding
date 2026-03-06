@@ -1,4 +1,4 @@
-# Project Overview — Theory-Infused AI for Biomedical Imaging
+# Project Overview — Image Data Infrastructure & Analysis to Drive Theory-Infused AI
 
 **Date:** 2026-03-03
 **Operational lead:** Ryan Tasseff (CIC biomaGUNE)

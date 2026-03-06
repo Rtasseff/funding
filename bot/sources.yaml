@@ -1,0 +1,227 @@
+# Grant Scanner — Funding Source Registry
+# Status: Reference configuration — not yet operational
+# This file defines all monitored funding portals for the grant scanner CLI.
+# See GRANT_SCANNER_CLI_SPEC.md Section 3 for the taxonomy and rationale.
+#
+# Source classes:
+#   call_portal      — Active calls to scan (fetch + parse + evaluate)
+#   early_warning    — Calendars, pre-announcements, planned inventories (fetch + flag)
+#   legal_gazette    — Official publication backstops (fetch + filter by keywords)
+#   data_feed        — Machine-readable API/RSS sources (API pull — automation priority)
+#   programme_page   — Specific scheme pages (fetch + check for open/upcoming calls)
+#   reference        — Human-triage only; excluded from automated scanning
+
+sources:
+
+  # ──────────────────────────────────────────────
+  # EU (4 sources)
+  # ──────────────────────────────────────────────
+
+  - name: "EU Funding & Tenders Portal"
+    url: "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/calls-for-proposals"
+    region: EU
+    class: call_portal
+    priority: weekly
+    language: en
+    notes: "Central EU call database including Horizon Europe, MSCA, ERC, etc."
+
+  - name: "Horizon Europe Work Programmes"
+    url: "https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-europe/horizon-europe-work-programmes_en"
+    region: EU
+    class: early_warning
+    priority: weekly
+    language: en
+    notes: "Scope anchor for upcoming work programmes; actual calls route to EU F&T Portal."
+
+  - name: "Horizon Europe Cluster 1 Health"
+    url: "https://research-and-innovation.ec.europa.eu/research-area/health/cluster-1-health_en"
+    region: EU
+    class: reference
+    priority: null
+    language: en
+    notes: "Scope page for health-related topics. Not a call portal — useful for human triage of Cluster 1 alignment."
+
+  - name: "EIC Funding Opportunities"
+    url: "https://eic.ec.europa.eu/eic-funding-opportunities_en"
+    region: EU
+    class: programme_page
+    priority: quarterly
+    language: en
+    notes: "Only relevant if a translational or company partnership emerges. Low priority for current biomaGUNE profile."
+
+  # ──────────────────────────────────────────────
+  # Spain (10 sources)
+  # ──────────────────────────────────────────────
+
+  - name: "AEI Convocatorias"
+    url: "https://www.aei.gob.es/convocatorias"
+    region: Spain
+    class: call_portal
+    priority: weekly
+    language: es
+    notes: "Main Spanish research call landing page."
+
+  - name: "AEI Buscador de Convocatorias"
+    url: "https://www.aei.gob.es/convocatorias/buscador-convocatorias"
+    region: Spain
+    class: call_portal
+    priority: weekly
+    language: es
+    notes: "Searchable catalog of AEI calls. Separate entry point from the landing page with filtering capabilities."
+
+  - name: "AEI Calendario Previsto"
+    url: "https://www.aei.gob.es/convocatorias/calendario-previsto-convocatorias-agencia-estatal-investigacion"
+    region: Spain
+    class: early_warning
+    priority: weekly
+    language: es
+    notes: "Pre-announcements of planned AEI calls — early warning for proposal planning."
+
+  - name: "MICIU Convocatorias"
+    url: "https://www.ciencia.gob.es/Convocatorias.html"
+    region: Spain
+    class: call_portal
+    priority: weekly
+    language: es
+    notes: "Ministry of Science, Innovation and Universities. Covers calls beyond AEI scope."
+
+  - name: "ISCIII / AES"
+    url: "https://www.isciii.es/QueHacemos/Financiacion/Paginas/default.aspx"
+    region: Spain
+    class: call_portal
+    priority: weekly
+    language: es
+    notes: "Instituto de Salud Carlos III — Acción Estratégica en Salud. Biomedical and health research calls."
+
+  - name: "CDTI Ayudas y Servicios"
+    url: "https://www.cdti.es/ayudas"
+    region: Spain
+    class: call_portal
+    priority: weekly
+    language: es
+    notes: "Centro para el Desarrollo Tecnológico e Industrial. Collaborative R&D, translational projects."
+
+  - name: "CDTI Calendario"
+    url: "https://www.cdti.es/ayudas/calendario-de-convocatorias"
+    region: Spain
+    class: early_warning
+    priority: weekly
+    language: es
+    notes: "Expected CDTI call windows for planning."
+
+  - name: "BOE Ayudas"
+    url: "https://www.boe.es/buscar/ayudas.php"
+    region: Spain
+    class: legal_gazette
+    priority: weekly
+    language: es
+    notes: "Boletín Oficial del Estado — official state bulletin. Backstop for newly published grants."
+
+  - name: "BDNS / SNPSAP"
+    url: "https://www.pap.hacienda.gob.es/bdnstrans/"
+    region: Spain
+    class: legal_gazette
+    priority: weekly
+    language: es
+    notes: "Base de Datos Nacional de Subvenciones. Comprehensive national grants database."
+    implementation_notes: "v2 — requires structured API integration or alert subscription. Web scraping is non-trivial."
+
+  - name: "FECYT Convocatorias"
+    url: "https://www.fecyt.es/es/convocatorias"
+    region: Spain
+    class: call_portal
+    priority: biweekly
+    language: es
+    notes: "Fundación Española para la Ciencia y la Tecnología. Open science, science communication, and dissemination calls."
+
+  # ──────────────────────────────────────────────
+  # Basque Country (11 sources)
+  # ──────────────────────────────────────────────
+
+  - name: "Euskadi Ayudas / Trámites"
+    url: "https://www.euskadi.eus/gobierno-vasco/tramites-servicios/"
+    region: Basque
+    class: call_portal
+    priority: weekly
+    language: es
+    notes: "Main Basque Government aid and services portal."
+
+  - name: "Open Data Euskadi"
+    url: "https://opendata.euskadi.eus/"
+    region: Basque
+    class: data_feed
+    priority: weekly
+    language: es
+    notes: "Machine-readable source (API/RSS/JSON). Automation priority — cleanest structured data."
+
+  - name: "BOPV"
+    url: "https://www.euskadi.eus/web01-bopv/es/"
+    region: Basque
+    class: legal_gazette
+    priority: weekly
+    language: es
+    notes: "Boletín Oficial del País Vasco — official Basque gazette. Legal backstop for grant publications."
+
+  - name: "Dept. Ciencia, Universidades e Innovación"
+    url: "https://www.euskadi.eus/gobierno-vasco/departamento-ciencia-universidades-innovacion/"
+    region: Basque
+    class: reference
+    priority: null
+    language: es
+    notes: "Departmental landing page. Calls are covered by Euskadi Ayudas portal. Useful for policy context only."
+
+  - name: "Plan Estratégico de Subvenciones"
+    url: "https://www.euskadi.eus/gobierno-vasco/-/plan-estrategico-subvenciones/"
+    region: Basque
+    class: early_warning
+    priority: annual
+    language: es
+    notes: "Annual subsidy inventory (~68 lines in 2026). Published once per year — useful for planning."
+
+  - name: "PIBA"
+    url: "https://www.euskadi.eus/gobierno-vasco/-/ayuda-subvencion/programa-de-ayudas-para-la-financiacion-de-proyectos-de-investigacion-basica-y-aplicada-piba/"
+    region: Basque
+    class: programme_page
+    priority: weekly
+    language: es
+    notes: "Programa de Investigación Básica y Aplicada. Basic and applied research project funding."
+
+  - name: "IKERTALDE"
+    url: "https://www.euskadi.eus/gobierno-vasco/-/ayuda-subvencion/programa-de-apoyo-a-los-grupos-de-investigacion-del-sistema-universitario-vasco-ikertalde/"
+    region: Basque
+    class: programme_page
+    priority: weekly
+    language: es
+    notes: "Research group support programme in the Basque university system."
+
+  - name: "INKER"
+    url: "https://www.euskadi.eus/gobierno-vasco/-/ayuda-subvencion/programa-de-infraestructuras-de-investigacion-inker/"
+    region: Basque
+    class: programme_page
+    priority: weekly
+    language: es
+    notes: "Scientific equipment and research infrastructure programme."
+
+  - name: "SPRI Hazitek"
+    url: "https://www.spri.eus/es/ayudas/hazitek/"
+    region: Basque
+    class: programme_page
+    priority: weekly
+    language: es
+    notes: "Industry-academic R&D consortia. Requires company lead; relevant for collaborative projects."
+
+  - name: "SPRI Elkartek"
+    url: "https://www.spri.eus/es/ayudas/elkartek/"
+    region: Basque
+    class: programme_page
+    priority: weekly
+    language: es
+    notes: "Collaborative research programme for RVCTI (Basque Science, Technology and Innovation Network) actors."
+
+  - name: "Ikerbasque Calls"
+    url: "https://calls.ikerbasque.net/"
+    region: Basque
+    class: programme_page
+    priority: biweekly
+    language: en
+    notes: "Basque Foundation for Science. Talent recruitment and research programme opportunities."

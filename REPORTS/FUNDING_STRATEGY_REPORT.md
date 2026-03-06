@@ -1,4 +1,4 @@
-# Funding Strategy Report: Theory-Infused AI for Biomedical Imaging
+# Funding Strategy Report: Image Data Infrastructure & Analysis to Drive Theory-Infused AI
 
 **CIC biomaGUNE — March 2026**
 **Prepared by:** Ryan Tasseff, Data Officer
@@ -7,7 +7,7 @@
 
 ## 1. Program vision
 
-CIC biomaGUNE is building a multi-year, multi-funder research program called **"Theory-Infused AI for Biomedical Imaging."** The program's central argument is that biomedical imaging — across microscopy, MRI, PET, SPECT, and CT — is generating data at a scale that outpaces current analytical capacity. We address this not with generic AI tooling, but with a distinctive scientific proposition: **unifying generative AI with mechanistic modeling** so that learned representations are constrained by physics and biology, and mechanistic models are empowered by data-driven representations.
+CIC biomaGUNE is building a multi-year, multi-funder research program called **"Image Data Infrastructure & Analysis to Drive Theory-Infused AI."** The program's central argument is that biomedical imaging — across microscopy, MRI, PET, SPECT, and CT — is generating data at a scale that outpaces current analytical capacity. We address this not with generic AI tooling, but with a distinctive scientific proposition: **unifying generative AI with mechanistic modeling** so that learned representations are constrained by physics and biology, and mechanistic models are empowered by data-driven representations.
 
 The program is structured as a **portfolio of five complementary modules**, each targeting different funder preferences and call types. This portfolio design reduces dependency on any single call, supports staged delivery, and allows us to pursue institutional infrastructure funding and PI-led scientific funding simultaneously.
 
@@ -300,7 +300,7 @@ Maps to Horizon Europe Health & Digital pillars (multimodal data, trustworthy AI
 
 The program uses a repeatable proposal-building method:
 
-1. **Stable umbrella narrative.** The program brief ("Theory-Infused AI for Biomedical Imaging") remains consistent across all proposals, adapted in emphasis but not reinvented.
+1. **Stable umbrella narrative.** The program brief ("Image Data Infrastructure & Analysis to Drive Theory-Infused AI") remains consistent across all proposals, adapted in emphasis but not reinvented.
 
 2. **Module fiches as source of truth.** Each of the five modules has a maintained project fiche with scope, deliverables, metrics, and guardrails. Proposal work packages map directly to module IDs.
 

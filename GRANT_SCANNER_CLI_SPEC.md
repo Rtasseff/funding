@@ -1,20 +1,19 @@
-# Grant Scanner CLI Tool — Specification
+# Grant Scanner — Specification
 
-**Date:** 2026-03-03
+**Date:** 2026-03-03 (updated 2026-03-06)
 **Author:** Ryan Tasseff / Claude
-**Purpose:** Automated weekly scan of funding portals, validated against the five-module / two-track framework, with structured reporting.
+**Purpose:** Scan funding portals for open calls and evaluate each against the five-module / two-track framework, with structured reporting.
 
 ---
 
 ## 1) What the tool does
 
-A CLI script (designed to be run via `claude` CLI or cron) that:
+Two Claude Code skills that use WebSearch, WebFetch, and full dossier context to find and evaluate funding calls:
 
-1. Queries a defined set of funding portals for open or upcoming calls
-2. Filters by minimum lead time (≥ 90 days to deadline)
-3. Validates that each URL resolves (HTTP 200, no redirect to generic error page)
-4. Reads the actual call text and scores language fit against the five modules and two tracks — not just keyword matching, but contextual confirmation that the call's scope genuinely aligns
-5. Outputs a structured report (Markdown + optional CSV)
+- **`/scan-grants`** — multi-region scan across all configured sources, producing a dated report in `REPORTS/`
+- **`/check-grant`** — quick evaluation of a single call (URL or description), with conversational output
+
+Claude Code reads the actual call text and scores fit contextually — not keyword matching, but genuine scope evaluation against the program's modules and tracks.
 
 **The tool takes no action beyond reporting.** No submissions, no emails, no side effects.
 
@@ -22,148 +21,166 @@ A CLI script (designed to be run via `claude` CLI or cron) that:
 
 ## 2) Input: the dossier context
 
-The tool needs access to the following files from the funding positioning dossier (provided as local paths or bundled into the tool's config directory):
+Both skills read the following files at invocation to build evaluation context:
 
 - `STRATEGY.md` — two-track pattern and packaging rules
 - `PROJECT_OVERVIEW.md` — program scope and non-goals
 - Module fiches:
-  - `MOD-FAIR-TRAIN.md`
-  - `MOD-IMG-SERVERS.md`
-  - `MOD-AI-PIPELINES.md`
-  - `MOD-THEORY-AI.md`
-  - `MOD-MULTIMODAL-BIOMARKERS.md`
-- `GRANT_FIT_MATRIX_TEMPLATE.md` — scoring criteria
+  - `MODULES/MOD-FAIR-TRAIN.md`
+  - `MODULES/MOD-IMG-SERVERS.md`
+  - `MODULES/MOD-AI-PIPELINES.md`
+  - `MODULES/MOD-THEORY-AI.md`
+  - `MODULES/MOD-MULTIMODAL-BIOMARKERS.md`
+- `REFERENCE/KEYWORDS_TAXONOMY.md` — controlled keywords for query construction
+- `bot/sources.yaml` — funding source registry (URLs, regions, classes)
 
-These are loaded as system context for the LLM evaluation step.
+Total dossier context is ~58 KB / ~15K tokens — fits comfortably in a single invocation.
 
 ---
 
 ## 3) Sources to scan
 
-### Tier 1 — Primary (scan every week)
+### Source classification
 
-| Source | URL | Type | Notes |
-|---|---|---|---|
-| EU Funding & Tenders Portal | https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/calls-for-proposals | Web/API | Central EU call database incl. Horizon Europe |
-| AEI Convocatorias | https://www.aei.gob.es/convocatorias | Web | Main Spanish research call portal |
-| AEI Calendario Previsto | https://www.aei.gob.es/convocatorias/calendario-previsto-convocatorias-agencia-estatal-investigacion | Web | Upcoming calls not yet open — early warning |
-| BOE Ayudas | https://www.boe.es/buscar/ayudas.php | Web | Official state bulletin, newly published grants |
-| BDNS / SNPSAP | https://www.pap.hacienda.gob.es/bdnstrans/ | Web | National grants database; supports alert subscriptions |
-| Euskadi.eus Ayudas | https://www.euskadi.eus/gobierno-vasco/tramites-servicios/ | Web | Main Basque Government aid portal |
-| BOPV | https://www.euskadi.eus/web01-bopv/es/ | Web | Official Basque gazette |
-| Open Data Euskadi | https://opendata.euskadi.eus/ | API/RSS/XLSX | Machine-readable — priority for automation |
+Sources are classified into six functional classes that determine scanning behavior:
 
-### Tier 2 — Secondary (scan biweekly or on-demand)
+| Class | What it is | Scanner behavior |
+|---|---|---|
+| `call_portal` | Active call listings | WebSearch + WebFetch for open calls |
+| `early_warning` | Calendars, pre-announcements | WebSearch for upcoming calls; WebFetch programme pages |
+| `legal_gazette` | Official publication backstops (BOE, BOPV, BDNS) | WebSearch with research/innovation keywords |
+| `data_feed` | Machine-readable API/RSS sources | WebSearch (structured API integration deferred to v2) |
+| `programme_page` | Specific scheme or programme pages | WebFetch directly to check for open/upcoming calls |
+| `reference` | Scope/context pages (not scannable) | Not scanned — human triage only |
 
-| Source | URL | Type | Notes |
-|---|---|---|---|
-| Horizon Europe Work Programmes | https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-europe/horizon-europe-work-programmes_en | Web | Programme docs; calls link back to Tier 1 EU portal |
-| CDTI Convocatorias | https://www.cdti.es/convocatorias | Web | Translational / infrastructure / collaborative R&D |
-| ISCIII / AES | https://www.isciii.es/ | Web | Biomedical and health research calls |
-| Basque Ciencia/Universidades | https://www.euskadi.eus/informacion/ayudas-al-personal-investigador-programa-predoctoral/web01-a3predoc/es/ | Web | IKERTALDE, PIBA, Programa CIC, pre/postdoc |
-| Ikerbasque Calls | https://calls.ikerbasque.net/ | Web | Science funding/recruitment |
+### EU (4 sources)
+
+| # | Name | Class | Priority | Notes |
+|---|---|---|---|---|
+| 1 | [EU Funding & Tenders Portal](https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/calls-for-proposals) | call_portal | weekly | Central EU call database |
+| 2 | [Horizon Europe Work Programmes](https://research-and-innovation.ec.europa.eu/funding/funding-opportunities/funding-programmes-and-open-calls/horizon-europe/horizon-europe-work-programmes_en) | early_warning | weekly | Scope anchor; calls route to #1 |
+| 3 | [Horizon Europe Cluster 1 Health](https://research-and-innovation.ec.europa.eu/research-area/health/cluster-1-health_en) | reference | — | Scope page for health topics; not scannable |
+| 4 | [EIC Funding Opportunities](https://eic.ec.europa.eu/eic-funding-opportunities_en) | programme_page | quarterly | Only if translational partnership emerges |
+
+### Spain (10 sources)
+
+| # | Name | Class | Priority | Notes |
+|---|---|---|---|---|
+| 5 | [AEI Convocatorias](https://www.aei.gob.es/convocatorias) | call_portal | weekly | Main Spanish research calls |
+| 6 | [AEI Buscador de Convocatorias](https://www.aei.gob.es/convocatorias/buscador-convocatorias) | call_portal | weekly | Searchable catalog (separate from landing page) |
+| 7 | [AEI Calendario Previsto](https://www.aei.gob.es/convocatorias/calendario-previsto-convocatorias-agencia-estatal-investigacion) | early_warning | weekly | Pre-announcements |
+| 8 | [MICIU Convocatorias](https://www.ciencia.gob.es/Convocatorias.html) | call_portal | weekly | Ministry calls beyond AEI |
+| 9 | [ISCIII / AES](https://www.isciii.es/QueHacemos/Financiacion/Paginas/default.aspx) | call_portal | weekly | Biomedical/health research |
+| 10 | [CDTI Ayudas y Servicios](https://www.cdti.es/ayudas) | call_portal | weekly | Collaborative R&D, translational |
+| 11 | [CDTI Calendario](https://www.cdti.es/ayudas/calendario-de-convocatorias) | early_warning | weekly | Expected call windows |
+| 12 | [BOE Ayudas](https://www.boe.es/buscar/ayudas.php) | legal_gazette | weekly | Official state bulletin backstop |
+| 13 | [BDNS / SNPSAP](https://www.pap.hacienda.gob.es/bdnstrans/) | legal_gazette | weekly | National grants DB |
+| 14 | [FECYT Convocatorias](https://www.fecyt.es/es/convocatorias) | call_portal | biweekly | Open science / science communication |
+
+### Basque Country (11 sources)
+
+| # | Name | Class | Priority | Notes |
+|---|---|---|---|---|
+| 15 | [Euskadi Ayudas / Trámites](https://www.euskadi.eus/gobierno-vasco/tramites-servicios/) | call_portal | weekly | Main Basque aid portal |
+| 16 | [Open Data Euskadi](https://opendata.euskadi.eus/) | data_feed | weekly | Machine-readable (API/RSS/JSON) |
+| 17 | [BOPV](https://www.euskadi.eus/web01-bopv/es/) | legal_gazette | weekly | Official Basque gazette backstop |
+| 18 | [Dept. Ciencia, Universidades e Innovación](https://www.euskadi.eus/gobierno-vasco/departamento-ciencia-universidades-innovacion/) | reference | — | Departmental landing; not scannable |
+| 19 | [Plan Estratégico de Subvenciones](https://www.euskadi.eus/gobierno-vasco/-/plan-estrategico-subvenciones/) | early_warning | annual | Annual subsidy inventory (~68 lines in 2026) |
+| 20 | [PIBA](https://www.euskadi.eus/gobierno-vasco/-/ayuda-subvencion/programa-de-ayudas-para-la-financiacion-de-proyectos-de-investigacion-basica-y-aplicada-piba/) | programme_page | weekly | Basic/applied research projects |
+| 21 | [IKERTALDE](https://www.euskadi.eus/gobierno-vasco/-/ayuda-subvencion/programa-de-apoyo-a-los-grupos-de-investigacion-del-sistema-universitario-vasco-ikertalde/) | programme_page | weekly | Research group support |
+| 22 | [INKER](https://www.euskadi.eus/gobierno-vasco/-/ayuda-subvencion/programa-de-infraestructuras-de-investigacion-inker/) | programme_page | weekly | Scientific equipment |
+| 23 | [SPRI Hazitek](https://www.spri.eus/es/ayudas/hazitek/) | programme_page | weekly | Industry-academic R&D consortia |
+| 24 | [SPRI Elkartek](https://www.spri.eus/es/ayudas/elkartek/) | programme_page | weekly | Collaborative research (RVCTI actors) |
+| 25 | [Ikerbasque Calls](https://calls.ikerbasque.net/) | programme_page | biweekly | Talent/programme opportunities |
 
 ### Source configuration
 
-Sources are defined in a YAML config file (`sources.yaml`) so they can be added, removed, or re-tiered without changing code:
-
-```yaml
-sources:
-  - name: "EU Funding & Tenders Portal"
-    url: "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/calls-for-proposals"
-    tier: 1
-    type: web
-    language: en
-    scan_frequency: weekly
-
-  - name: "Open Data Euskadi"
-    url: "https://opendata.euskadi.eus/"
-    tier: 1
-    type: api
-    language: es
-    scan_frequency: weekly
-    notes: "Machine-readable, supports RSS and API"
-
-  # ... etc
-```
+Sources are defined in `bot/sources.yaml` so they can be added, removed, or reclassified without changing the skill definitions. See that file for the full registry with URLs, classes, priorities, languages, and notes.
 
 ---
 
-## 4) Filtering rules
+## 4) Scanning strategy
 
-### 4a. Deadline filter
-- **Minimum lead time: 90 days** from scan date
-- Calls with no published deadline: include but flag as `deadline: TBD`
-- Calls already past deadline: exclude entirely
-- Upcoming/pre-announcement calls (no open date yet): include and flag as `status: pre-announcement`
+The scanner uses **theme-based WebSearch** combined with **targeted WebFetch** of programme pages. This replaces the old scraper pipeline approach (HTTP fetching, HTML parsing, rate limiting) with Claude Code's native capabilities.
 
-### 4b. URL validation
-- HTTP HEAD or GET request to the call-specific URL
-- Accept: HTTP 200 (or 301/302 that resolves to a valid page)
-- Reject: 404, 410, 5xx, redirect to generic portal homepage, timeout > 10s
-- If URL fails validation: exclude from report but log to `dead_links.log` with source and date
+### WebSearch queries
 
-### 4c. Language / scope validation (LLM step)
-This is the critical differentiator from dumb keyword search. For each candidate call that passes 4a and 4b:
+For each region in scope, the scanner constructs 3-5 search queries combining:
+- Funder names (from sources.yaml)
+- Program keywords (from KEYWORDS_TAXONOMY.md)
+- Temporal qualifiers (current year, "convocatoria abierta", "open call")
 
-1. Fetch the call text (or abstract/summary if full text is gated)
-2. Send to Claude with the dossier context and the following evaluation prompt:
+**EU queries** are in English. **Spain and Basque** queries are in Spanish. The scanner dynamically adjusts queries based on initial results.
 
-```
-You are evaluating whether a funding call is a genuine fit for the
-program described in the attached dossier documents.
+### WebFetch of programme pages
 
-For each call, assess:
+For `programme_page`-class sources (e.g., Elkartek, PIBA, Hazitek), the scanner fetches the page directly to check for open or upcoming call listings.
 
-1. TRACK FIT: Does this call fund Track A (institutional enablement /
-   infrastructure / open science) or Track B (PI-anchored scientific
-   projects with platform work packages)? Or neither?
+### Advantages over scraper approach
 
-2. MODULE FIT: Which of the five modules does this call genuinely
-   support? Score each 0-3:
-   - 0 = no fit
-   - 1 = superficial keyword overlap but scope doesn't align
-   - 2 = partial fit, would require creative framing
-   - 3 = strong natural fit
+- **No parser to maintain** — handles portal redesigns gracefully
+- **Finds calls beyond monitored portals** — WebSearch surfaces opportunities from any source
+- **Multilingual natively** — no translation or language detection pipeline needed
+- **Immediate availability** — no dependencies, no deployment, no cron infrastructure
 
-   Modules:
-   - MOD-FAIR-TRAIN (FAIR data practices, training, adoption)
-   - MOD-IMG-SERVERS (imaging repositories, OMERO/XNAT)
-   - MOD-AI-PIPELINES (validated analysis pipelines, AI/ML for imaging)
-   - MOD-THEORY-AI (theory-infused AI, generative AI + mechanistic modeling, physics-informed ML)
-   - MOD-MULTIMODAL-BIOMARKERS (multimodal science, biomarker discovery, predictive imaging, digital twins)
+---
 
-3. CONFIDENCE: Overall confidence that this call is worth pursuing
-   (HIGH / MEDIUM / LOW) with one-sentence justification.
+## 5) Evaluation rubric
 
-4. RED FLAGS: Note any scope mismatches, eligibility issues, or
-   reasons this might be a false positive (e.g., "digital health"
-   used in a clinical IT context that doesn't apply to us).
+For each candidate call, the scanner produces a structured evaluation:
 
-Be skeptical. A call mentioning "data" or "digital" is not
-automatically a fit. Read the actual scope and objectives.
-```
+### Track fit
 
-### 4d. Composite inclusion rule
+- **Track A** — institutional enablement / infrastructure / open science
+- **Track B** — PI-anchored scientific projects with platform work packages
+- **A+B** — both tracks
+- **Neither** — scope doesn't align with the two-track pattern
+
+### Module fit (0-3 per module)
+
+| Score | Meaning |
+|---|---|
+| 0 | No fit |
+| 1 | Superficial keyword overlap but scope doesn't align |
+| 2 | Partial fit, would require creative framing |
+| 3 | Strong natural fit |
+
+Modules:
+- **MOD-FAIR-TRAIN** — FAIR data practices, training, adoption, open science compliance
+- **MOD-IMG-SERVERS** — imaging repositories, OMERO/XNAT, data infrastructure, governed access
+- **MOD-AI-PIPELINES** — validated analysis pipelines, foundation models, AI/ML for imaging, QA
+- **MOD-THEORY-AI** — theory-infused AI, generative AI + mechanistic modeling, physics-informed ML, nonlinear dynamics
+- **MOD-MULTIMODAL-BIOMARKERS** — multimodal science, biomarker discovery, predictive imaging, digital twins
+
+### Confidence
+
+- **HIGH** — strong fit, clear eligibility, actionable
+- **MEDIUM** — plausible fit, may require creative framing or partner coordination
+- **LOW** — weak fit, likely false positive
+
+### Red flags
+
+Scope mismatches, eligibility issues, consortium requirements beyond current readiness, budget scale misalignment, geographic restrictions.
+
+### Composite inclusion rule
+
 Include in the final report only if:
-- At least one module scores ≥ 2
+- At least one module scores >= 2
 - Confidence is MEDIUM or HIGH
-- URL validated
-- Deadline ≥ 90 days out (or TBD/pre-announcement)
 
-Calls scoring all 1s or with LOW confidence go to a separate `borderline.log` for optional manual review.
+Calls failing this rule are listed in the "evaluated but excluded" section of the report.
 
 ---
 
-## 5) Output format
+## 6) Output format
 
-### Primary report: `grant_scan_YYYY-MM-DD.md`
+### `/scan-grants` report: `REPORTS/grant_scan_YYYY-MM-DD.md`
 
 ```markdown
 # Grant Scanner Report — {date}
 
-**Scan parameters:** {sources scanned}, {date range}, {min lead time}
-**Calls evaluated:** {N total} → {N passed filters} → {N in report}
+**Scan scope:** {regions or source}
+**Calls found:** {N total} | **Passed evaluation:** {N included}
 
 ---
 
@@ -171,11 +188,11 @@ Calls scoring all 1s or with LOW confidence go to a separate `borderline.log` fo
 
 ### {Call Title}
 - **Funder:** {funder name}
-- **Portal:** {source name}
-- **Deadline:** {date} ({days remaining}d)
+- **Source:** {source name}
+- **Deadline:** {date or TBD} ({days remaining}d)
 - **Status:** open | pre-announcement | rolling
-- **URL:** {verified URL}
-- **Summary:** {2-3 sentence summary of what the call actually funds}
+- **URL:** {URL}
+- **Summary:** {2-3 sentence summary}
 - **Track:** A | B | A+B
 - **Module fit:**
   - MOD-FAIR-TRAIN: {0-3} — {one-line reasoning}
@@ -184,111 +201,74 @@ Calls scoring all 1s or with LOW confidence go to a separate `borderline.log` fo
   - MOD-THEORY-AI: {0-3} — {one-line reasoning}
   - MOD-MULTIMODAL-BIOMARKERS: {0-3} — {one-line reasoning}
 - **Confidence:** HIGH — {justification}
-- **Red flags:** {any concerns or none}
+- **Red flags:** {concerns or "None"}
 
 ---
 
 ## Medium Confidence
-
 {same format}
 
 ---
 
+## Calls evaluated but excluded
+{brief list with one-line reason each}
+
+---
+
 ## Scan metadata
-- Sources with errors: {list}
-- Dead links found: {count, see dead_links.log}
-- Borderline calls: {count, see borderline.log}
+- Date: {date}
+- Sources checked: {list}
+- Sources with errors or no results: {list}
 ```
 
-### Secondary output: `grant_scan_YYYY-MM-DD.csv`
+### `/check-grant` output
 
-Flat CSV with columns: `call_title, funder, portal, deadline, days_remaining, status, url, track, mod_fair, mod_img, mod_ai, mod_theory, mod_multi, confidence, red_flags, summary`
+Conversational — same evaluation structure but presented inline, not written to file (unless requested). See skill definition for format.
 
-This feeds directly into the `GRANT_FIT_MATRIX_TEMPLATE.csv`.
+### CSV on request
+
+If the user asks, the scanner can produce a flat CSV with columns: `call_title, funder, source, deadline, days_remaining, status, url, track, mod_fair, mod_img, mod_ai, mod_theory, mod_multi, confidence, red_flags, summary` — suitable for appending to `GRANT_FIT_MATRIX_TEMPLATE.csv`.
 
 ---
 
-## 6) CLI interface
+## 7) Invocation
 
-```bash
-# Full weekly scan (Tier 1 sources)
-grant-scanner scan
+### `/scan-grants`
 
-# Full scan including Tier 2
-grant-scanner scan --all-tiers
-
-# Scan specific source only
-grant-scanner scan --source "AEI Convocatorias"
-
-# Check a single URL manually
-grant-scanner check <url>
-
-# Validate all configured source URLs are reachable
-grant-scanner healthcheck
-
-# Show current configuration
-grant-scanner config
-
-# Output previous report
-grant-scanner report --date 2026-02-24
+```
+/scan-grants              # Full scan — all regions
+/scan-grants EU           # EU sources only
+/scan-grants Spain        # Spanish sources only
+/scan-grants Basque       # Basque sources only
+/scan-grants Elkartek     # Single source focus
+/scan-grants <url>        # Evaluate a specific URL (same as /check-grant)
 ```
 
-### Configuration
-- `~/.grant-scanner/config.yaml` — global settings (lead time, output dir, API keys)
-- `~/.grant-scanner/sources.yaml` — portal definitions
-- `~/.grant-scanner/dossier/` — symlinks or copies of module fiches and strategy docs
-- `~/.grant-scanner/reports/` — generated reports
-- `~/.grant-scanner/logs/` — dead_links.log, borderline.log, scan.log
+### `/check-grant`
 
-### Cron setup (example)
-```bash
-# Run every Friday at 08:00 (before weekly triage)
-0 8 * * 5 /usr/local/bin/grant-scanner scan >> ~/.grant-scanner/logs/cron.log 2>&1
+```
+/check-grant <url>                    # Evaluate a call by URL
+/check-grant <call name or funder>    # Search for and evaluate a call
+/check-grant <pasted text>            # Evaluate from description text
 ```
 
 ---
 
-## 7) Technical approach
-
-### Scraping / data retrieval
-- **Open Data Euskadi:** Use their API or RSS feed directly — this is the cleanest source
-- **EU Funding & Tenders Portal:** Has a structured search; may have an undocumented API or can be scraped from the search results page
-- **Spanish portals (AEI, BOE, BDNS):** Mostly web scraping; BDNS supports alert subscriptions which could be leveraged
-- **Basque portals (Euskadi.eus, BOPV):** Web scraping
-
-### Language handling
-- Spanish-language calls: the LLM evaluation step handles multilingual input natively
-- Call text should be fetched in the original language; no pre-translation needed
-
-### Rate limiting and politeness
-- Maximum 1 request per second per domain
-- Respect `robots.txt` where present
-- Cache fetched pages for 24 hours to avoid redundant requests on reruns
-
-### Dependencies
-- Python 3.10+ or Node.js (implementer's choice)
-- `claude` CLI for the LLM evaluation step (or direct API calls to Anthropic)
-- `requests` / `httpx` or equivalent for HTTP
-- `beautifulsoup4` or equivalent for HTML parsing
-- `pyyaml` for config
-- `feedparser` for RSS (Open Data Euskadi)
-
----
-
-## 8) What this tool does NOT do
+## 8) What this does NOT do
 
 - Submit proposals or pre-register
-- Send emails or notifications (add later if wanted)
-- Store historical trend data (add later if wanted)
+- Send emails or notifications (future extension)
+- Store historical trend data (future extension)
 - Replace human judgment — this is a filter, not a decision maker
-- Guarantee completeness — some calls may not appear on monitored portals
+- Guarantee completeness — some calls may not appear in web search results or on monitored portals
 
 ---
 
-## 9) Future extensions (not in v1)
+## 9) Future extensions
 
-- Email or Slack notification when HIGH confidence calls appear
-- Historical tracking: trend of calls per module over time
-- Auto-populate GRANT_FIT_MATRIX_TEMPLATE.csv
-- Portal-specific API integrations as they become available
-- Multi-institute mode (for ReDIB network scanning)
+- **Scheduled scanning** — wrapper script or API integration to trigger `/scan-grants` on a schedule
+- **Notifications** — email or Slack alerts when HIGH confidence calls appear
+- **Historical tracking** — trend of calls per module over time
+- **Auto-populate Grant-Fit Matrix** — append rows to `GRANT_FIT_MATRIX_TEMPLATE.csv` automatically
+- **Portal-specific API integrations** — structured access to BDNS, Open Data Euskadi as they become available
+- **Multi-institute mode** — ReDIB network scanning

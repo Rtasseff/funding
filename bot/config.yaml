@@ -1,41 +1,15 @@
-# Grant Scanner CLI — Reference Configuration
-# Status: Template — not yet operational
-# Runtime config lives at ~/.grant-scanner/config.yaml
-# This in-repo copy serves as a documented reference.
-
-# Dossier files loaded as LLM context for evaluation (relative to repo root)
-dossier:
-  strategy: STRATEGY.md
-  overview: PROJECT_OVERVIEW.md
-  modules:
-    - MODULES/MOD-FAIR-TRAIN.md
-    - MODULES/MOD-IMG-SERVERS.md
-    - MODULES/MOD-AI-PIPELINES.md
-    - MODULES/MOD-THEORY-AI.md
-    - MODULES/MOD-MULTIMODAL-BIOMARKERS.md
-
-# Keywords taxonomy (used for source-level pre-filtering, not for scoring)
-keywords_file: REFERENCE/KEYWORDS_TAXONOMY.md
-
-# Filtering parameters
-filters:
-  min_lead_time_days: 90
-  url_timeout_seconds: 10
-  request_delay_seconds: 1  # rate limiting per domain
-
-# LLM evaluation
-evaluation:
-  model: claude  # via claude CLI or Anthropic API
-  inclusion_rule:
-    min_module_score: 2          # at least one module must score >= this
-    min_confidence: MEDIUM       # MEDIUM or HIGH required for report inclusion
-
-# Output
-output:
-  reports_dir: reports/          # grant_scan_YYYY-MM-DD.md and .csv
-  logs_dir: logs/                # dead_links.log, borderline.log, scan.log
-  grant_fit_matrix: GRANT_FIT_MATRIX_TEMPLATE.csv
-
-# Sources are defined separately in sources.yaml
-# See GRANT_SCANNER_CLI_SPEC.md section 3 for the full source list
-sources_file: sources.yaml
+# Grant Scanner — Configuration
+#
+# The grant scanner is implemented as Claude Code skills (/scan-grants, /check-grant).
+# No runtime configuration is needed — the skills read project files directly.
+#
+# Command definitions: .claude/commands/scan-grants.md
+#                      .claude/commands/check-grant.md
+# Source registry:   bot/sources.yaml
+# Full spec:         GRANT_SCANNER_CLI_SPEC.md
+# Matching logic:    BOT_MATCHING_SPEC.md
+#
+# Evaluation parameters (embedded in command definitions):
+#   - Composite inclusion: at least one module >= 2, confidence MEDIUM or HIGH
+#   - Modules: MOD-FAIR-TRAIN, MOD-IMG-SERVERS, MOD-AI-PIPELINES, MOD-THEORY-AI, MOD-MULTIMODAL-BIOMARKERS
+#   - Tracks: A (institutional enablement), B (PI-anchored science)

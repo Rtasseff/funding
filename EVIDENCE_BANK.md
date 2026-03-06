@@ -67,7 +67,7 @@ Institute DMP kit + OA/DMP governance package in formalization; two imaging-RDM 
 - Multiscale simulation experience: co-developed Biocellion platform; published integrated multiscale multicellular skin model (bioRxiv 2019)
 - Institutional mechanistic modeling expertise (MD, quantum simulations)
 - DIPC partnership identified for compute and theoretical physics collaboration
-- Program proposal drafted: "Theory-infused AI for Biomedical Imaging" (see `REFERENCE/program_Proposal–Theory-infused_Ai.docx`)
+- Program proposal drafted: "Image Data Infrastructure & Analysis to Drive Theory-Infused AI" (see `REFERENCE/program_Proposal–Theory-infused_Ai.docx`)
 
 **Building toward:**
 - Initial formulations (entropy-based latent occupancy, manifold-constrained dynamics, variable-transformed latent dynamics)
