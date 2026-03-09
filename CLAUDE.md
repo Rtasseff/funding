@@ -9,7 +9,7 @@ Funding positioning dossier for CIC biomaGUNE. See `ARTIFACT_INDEX.md` for full 
 ### Just completed: First grant scan (Basque) + matrix populated
 
 - `/scan-grants Basque` tested successfully — report written to `SCANS/grant_scan_2026-03-06-01.md`
-- Grant-Fit Matrix populated with 9 rows (3 future-cycle targets, 4 missed 2026 calls, 1 open call to verify eligibility, 1 direct subsidy framework)
+- Grant-Fit Matrix populated with 8 rows (3 future-cycle targets, 4 missed 2026 calls, 1 direct subsidy framework)
 - Grant scanner commands (`/scan-grants`, `/check-grant`) are operational
 
 ### Key findings from Basque scan
@@ -28,6 +28,5 @@ Funding positioning dossier for CIC biomaGUNE. See `ARTIFACT_INDEX.md` for full 
 ### Next steps
 
 1. Run `/scan-grants Spain` and `/scan-grants EU` for national and European calls (likely longer timelines)
-2. Verify CIC biomaGUNE eligibility for Azpitek (research infrastructure, open until 2026-03-27)
-3. Test `/check-grant` with a known call URL
-4. Begin Elkartek 2027 consortium scoping during Phase 0
+2. Test `/check-grant` with a known call URL
+3. Begin Elkartek 2027 consortium scoping during Phase 0

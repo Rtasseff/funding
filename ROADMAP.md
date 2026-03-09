@@ -18,7 +18,6 @@
 - DIAP defining document (targeted June 2026)
 - Scope DIPC compute partnership (formal collaboration terms)
 - Run `/scan-grants Spain` and `/scan-grants EU` to complete initial scan coverage
-- Verify CIC biomaGUNE eligibility for Azpitek 2026 (infrastructure, deadline 2026-03-27)
 
 **Funding preparation milestones (tracked in Grant-Fit Matrix):**
 - Oct 2026: Begin Elkartek 2027 consortium partner outreach (DIPC, Tecnalia/Vicomtech, CIC bioGUNE)
